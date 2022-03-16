@@ -18,4 +18,5 @@ public class ConnectionUtility {
     DriverManager.registerDriver(new Driver());
     Connection connection = DriverManager.getConnection(url, username, password);
     return connection;
+  }
 }
