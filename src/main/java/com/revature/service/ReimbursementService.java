@@ -7,7 +7,9 @@ import com.revature.model.Reimbursement;
 import org.apache.tika.Tika;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReimbursementService {
@@ -19,19 +21,39 @@ public class ReimbursementService {
   //get all reimb
   public List<ResolveReimbursementDTO> getAllReimbursements() throws SQLException {
     List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimb();
-    return reimbursements;
+    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+
+    for(Reimbursement reimbursement : reimbursements) {
+      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(), reimbursement.getEmployee().getUsername(), reimbursement.getManager().getUsername()));
+    }
+    return reimbDTOs;
   }
 
   //get all by uid
   public List<ResolveReimbursementDTO> getReimbByUser(int userId) throws SQLException {
     List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUser(userId);
-    return reimbursements;
+    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+
+    for(Reimbursement reimbursement : reimbursements) {
+      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+          reimbursement.getEmployee().getUsername(), reimbursement.getManager().getUsername()));
+    }
+    return reimbDTOs;
   }
 
   //add new reimb
   public ResolveReimbursementDTO addNewReimb(int employeeId, AddReimbursementDTO dto) throws SQLException, InvalidImageException, IOException {
     Tika tika = new Tika();
     String mimeType = tika.detect(dto.getReceipt());
+
+    if(!mimeType.equals("image/jpeg") && !mimeType.equals("image/png") && !mimeType.equals("image/gif")) {
+      throw new InvalidImageException("Image must be one of: JPEG, PNG or GIF");
+    }
+    Reimbursement addedReimb = this.reimbursementDao.addReimburement(employeeId, dto);
+    return new ResolveReimbursementDTO(addedReimb.getId(), addedReimb.getRemitAmount(), addedReimb.getRemitDrescription(),
+        addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(), null)
   }
 
   //update (resolve) reimb
@@ -41,11 +63,24 @@ public class ReimbursementService {
       int intStatus = Integer.parseInt(status);
 
       Reimbursement reimb = this.reimbursementDao.updateReimbStatus(intReimbId, intStatus, resolverId);
-      return new ResolveReimbursementDTO;
+      return new ResolveReimbursementDTO(reimb.getId(), reimb.getRemitAmount(), reimb.getRemitDrescription(), reimb.getRemitSubmitted(),
+          reimb.getRemitResolved(), reimb.getType(), reimb.getStatus(), reimb.getEmployee().getUsername(), reimb.getManager().getUsername());
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Reimbursement id must by a numerical value");
     }
   }
 
   //get receipt -- will these stay as bytea in sql, or try cloud services?
+  public InputStream getReceipt(String reimbId) throws SQLException, ImageNotFoundException {
+    try {
+      int rId = Integer.parseInt(reimbId);
+      InputStream receipt = this.reimbursementDao.getReimbReceipt(rId);
+      if(receipt == null) {
+        throw new ImageNotFoundException("Reimbursement " + reimbId + " does not have a receipt attached");
+      }
+      return receipt;
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Invalid reimbursement or employee id");
+    }
+  }
 }
