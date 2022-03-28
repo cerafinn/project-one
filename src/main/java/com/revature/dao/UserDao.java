@@ -24,9 +24,12 @@ public class UserDao {
           int userId = rs.getInt("id");
           String user = rs.getString("username");
           String pswd = rs.getString("password");
+          String firstName = rs.getString("user_first_name");
+          String lastName = rs.getString("user_last_name");
+          String userEmail = rs.getString("user_email");
           String roleId = rs.getString("role");
 
-          return new User(userId, user, pswd, roleId);
+          return new User(userId, user, pswd, firstName, lastName, userEmail, roleId);
         }
         return null;
       }

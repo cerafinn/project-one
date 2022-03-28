@@ -3,6 +3,8 @@ package com.revature.service;
 import com.revature.dao.ReimbursementDao;
 import com.revature.dto.AddReimbursementDTO;
 import com.revature.dto.ResolveReimbursementDTO;
+import com.revature.exception.ImageNotFoundException;
+import com.revature.exception.InvalidImageException;
 import com.revature.model.Reimbursement;
 import org.apache.tika.Tika;
 
@@ -53,7 +55,7 @@ public class ReimbursementService {
     }
     Reimbursement addedReimb = this.reimbursementDao.addReimburement(employeeId, dto);
     return new ResolveReimbursementDTO(addedReimb.getId(), addedReimb.getRemitAmount(), addedReimb.getRemitDrescription(),
-        addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(), null)
+        addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(), null);
   }
 
   //update (resolve) reimb
