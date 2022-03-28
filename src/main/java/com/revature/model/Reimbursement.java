@@ -9,17 +9,17 @@ public class Reimbursement {
   private int remitAmount;
   private Timestamp remitSubmitted;
   private Timestamp remitResolved;
-  private String remitDrescription;
+  private String remitDescription;
   //  reimb_receipt bytea,
   private User employee;
   private User manager;
   private String type;
   private String status;
 
-  public Reimbursement(int id, int remitAmount, String remitDrescription, Timestamp remitSubmitted, Timestamp remitResolved, User employee, User manager, String type, String status) {
+  public Reimbursement(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, User employee, User manager, String type, String status) {
     this.id = id;
     this.remitAmount = remitAmount;
-    this.remitDrescription = remitDrescription;
+    this.remitDescription = remitDescription;
     this.remitSubmitted = remitSubmitted;
     this.remitResolved = remitResolved;
     this.employee = employee;
@@ -61,11 +61,11 @@ public class Reimbursement {
   }
 
   public String getRemitDrescription() {
-    return remitDrescription;
+    return remitDescription;
   }
 
-  public void setRemitDrescription(String remitDrescription) {
-    this.remitDrescription = remitDrescription;
+  public void setRemitDrescription(String remitDescription) {
+    this.remitDescription = Reimbursement.this.remitDescription;
   }
 
   public User getEmployee() {
@@ -106,14 +106,14 @@ public class Reimbursement {
     if (o == null || getClass() != o.getClass()) return false;
     Reimbursement remit = (Reimbursement) o;
     return id == remit.id && Objects.equals(remitAmount, remit.remitAmount) && Objects.equals(remitSubmitted, remit.remitSubmitted)
-        && Objects.equals(remitResolved, remit.remitResolved) && Objects.equals(remitDrescription, remit.remitDrescription)
+        && Objects.equals(remitResolved, remit.remitResolved) && Objects.equals(remitDescription, remit.remitDescription)
         && Objects.equals(employee, remit.employee) && Objects.equals(manager, remit.manager) && Objects.equals(type, remit.type)
         && Objects.equals(status, remit.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDrescription, employee, manager, type, status);
+    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, employee, manager, type, status);
   }
   @Override
   public String toString() {
@@ -122,7 +122,7 @@ public class Reimbursement {
         ", remitAmount='" + remitAmount + '\'' +
         ", remitSubmitted='" + remitSubmitted + '\'' +
         ", remitResolved='" + remitResolved + '\'' +
-        ", remitDescription='" + remitDrescription + '\'' +
+        ", remitDescription='" + remitDescription + '\'' +
         ", employee='" + employee + '\'' +
         ", manager='" + manager + '\'' +
         ", type='" + type + '\'' +
