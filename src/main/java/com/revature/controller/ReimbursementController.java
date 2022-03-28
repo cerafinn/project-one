@@ -18,15 +18,21 @@ public class ReimbursementController implements Controller {
     ctx.json(reimbursements);
   };
 
-  // endpoints for:
-  //get all reimb
-  //get all by uid
-  //add reimb
-  //update reimb (resolve from pending)
-  //view receipt
+  private Handler getReimbursementsByUser;
+
+  private Handler addReimburement;
+
+  private Handler getReimbReceipt;
+
+  private Handler resolveReimbursement;
+
   @Override
   public void mapEndpoints(Javalin app) {
-
+  app.get("/reimbursements", getallReimbursements);
+  app.get("/users/{userid}/reimbursements", getReimbursementsByUser);
+  app.post("/reimbursements", addReimburement);
+  app.get("reimbursements/{reimbId}/receipt", getReimbReceipt);
+  app.patch("reimbursements/{reimbId}", resolveReimbursement);
   }
 
 
