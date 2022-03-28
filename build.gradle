@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'jacoco'
 }
 
 group 'com.revature'
@@ -10,33 +9,20 @@ repositories {
     mavenCentral()
 }
 
-jacoco {
-    toolVersion = "0.8.7"
-    reportsDirectory = file("$buildDir/jacoco")
-}
-
 dependencies {
     testImplementation 'org.mockito:mockito-core:4.3.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     implementation 'org.postgresql:postgresql:42.3.3'
-    implementation 'io.javalin:javalin:4.3.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     implementation 'org.apache.tika:tika-core:2.3.0'
+    implementation 'io.javalin:javalin:4.4.0'
 }
-
-//test {
-//    finalizedBy jacocoTestReport
-//}
-//
-//jacocoTestReport {
-//    dependsOn test
-//}
 
 test {
     useJUnitPlatform()
