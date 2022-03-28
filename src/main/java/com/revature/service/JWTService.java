@@ -10,6 +10,7 @@ import java.security.Key;
 public class JWTService {
 
   private static JWTService instance;
+  public Object List;
   private Key key;
 
   private JWTService() {
@@ -17,7 +18,7 @@ public class JWTService {
     key = Keys.hmacShaKeyFor(secret);
   }
 
-  public JWTService getInstance() {
+  public static JWTService getInstance() {
     if(JWTService.instance == null) {
       JWTService.instance = new JWTService();
     }

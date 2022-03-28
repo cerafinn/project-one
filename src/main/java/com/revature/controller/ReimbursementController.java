@@ -1,30 +1,120 @@
 package com.revature.controller;
 
+import com.revature.dto.AddReimbursementDTO;
 import com.revature.dto.ResolveReimbursementDTO;
-import com.revature.model.Reimbursement;
+import com.revature.service.JWTService;
 import com.revature.service.ReimbursementService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
+import io.javalin.http.UnauthorizedResponse;
+import io.javalin.http.UploadedFile;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import org.apache.tika.Tika;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class ReimbursementController implements Controller {
-  public ReimbursementService reimbursementService;
+  private ReimbursementService reimbursementService;
+  private JWTService jwtService;
 
-  public ReimbursementController() { this.reimbursementService = new ReimbursementService(); }
+  public ReimbursementController() {
+    this.reimbursementService = new ReimbursementService();
+    this.jwtService = JWTService.getInstance();
+  }
 
   private Handler getallReimbursements = ctx -> {
+    String jwt = ctx.header("Authorization").split(" ")[1];
+    Jws<Claims> token = this.jwtService.parseJwt(jwt);
+
+    if(!token.getBody().get("user_role").equals("manager")) {
+      throw new UnauthorizedResponse("You are not a finance manager");
+    }
+
     List<ResolveReimbursementDTO> reimbursements = reimbursementService.getAllReimbursements();
     ctx.json(reimbursements);
   };
 
-  private Handler getReimbursementsByUser;
+  private Handler getReimbursementsByUser = ctx -> {
+    String jwt = ctx.header("Authorization").split(" ")[1];
+    Jws<Claims> token = this.jwtService.parseJwt(jwt);
+    String userId = ctx.pathParam("user_id");
+    int id = Integer.parseInt(userId);
 
-  private Handler addReimburement;
+    //change this so that managers can filter by employee?
+    if(!token.getBody().get("user_role").equals("employee")) {
+      throw new UnauthorizedResponse("Unable to return information for a single employee");
+    }
 
-  private Handler getReimbReceipt;
+    if(!token.getBody().get("user_id").equals(userId)) {
+      throw new UnauthorizedResponse("You can only retrieve your own reimbursements");
+    }
 
-  private Handler resolveReimbursement;
+    List<ResolveReimbursementDTO> dtos = this.reimbursementService.getReimbByUser(id);
+    ctx.json(dtos);
+  };
+
+  private Handler addReimburement =  ctx -> {
+    String jwt = ctx.header("Authorization").split(" ")[1];
+    Jws<Claims> token = this.jwtService.parseJwt(jwt);
+
+    if(!token.getBody().get("user_role").equals("employee")) {
+      throw new UnauthorizedResponse("You need to be a non-manager to submit a reimbursement request");
+    }
+
+    String uId = ctx.pathParam("user_id");
+    int id = Integer.parseInt(uId);
+
+    if(!token.getBody().get("user_id").equals(id)) {
+      throw new UnauthorizedResponse("You can only submit your own reimbursement requests");
+    }
+
+    //add information for reimbursement
+//    int remitAmount, String remitDescription, int remitType
+    String rAmount = ctx.formParam("remitAmount");
+    int remitAmount = Integer.parseInt(rAmount);
+    String remitDescription = ctx.formParam("remitDescription");
+    String rType = ctx.formParam("remitType");
+    int remitType = Integer.parseInt(rType);
+
+    AddReimbursementDTO dto = new AddReimbursementDTO();
+    dto.setRemitAmount(remitAmount);
+    dto.setRemitDescription(remitDescription);
+    dto.setRemitType(remitType);
+
+    UploadedFile upload = ctx.uploadedFile("receipt");
+    InputStream receipt = upload.getContent();
+    dto.setReceipt(receipt);
+
+    ResolveReimbursementDTO reimbursement = this.reimbursementService.addNewReimb(id, dto);
+    ctx.json(reimbursement);
+  };
+
+  private Handler getReimbReceipt = ctx -> {
+    String rId = ctx.pathParam("reimbId");
+    InputStream receipt = this.reimbursementService.getReceipt(rId);
+    Tika tika = new Tika();
+    String mimeType = tika.detect(receipt);
+    ctx.header("Content-Type", mimeType);
+    ctx.result(receipt);
+  };
+
+  private Handler resolveReimbursement = ctx -> {
+    String jwt = ctx.header("Authorization").split(" ")[1];
+    Jws<Claims> token = this.jwtService.parseJwt(jwt);
+
+    if(!token.getBody().get("user_role").equals("manager")) {
+      throw new UnauthorizedResponse("You are not a finance manager");
+    }
+
+    String rId = ctx.pathParam("reimbId");
+    String status = ctx.queryParam("status");
+    int uId = token.getBody().get("user_id", Integer.class);
+
+    ResolveReimbursementDTO reimbursement = this.reimbursementService.resolveReimb(rId, status, uId);
+    ctx.json(reimbursement);
+  };
 
   @Override
   public void mapEndpoints(Javalin app) {
@@ -34,7 +124,4 @@ public class ReimbursementController implements Controller {
   app.get("reimbursements/{reimbId}/receipt", getReimbReceipt);
   app.patch("reimbursements/{reimbId}", resolveReimbursement);
   }
-
-
-
 }

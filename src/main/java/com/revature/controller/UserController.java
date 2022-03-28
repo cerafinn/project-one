@@ -11,12 +11,17 @@ public class UserController implements Controller {
   // do we need a user controller -- will it just be the login endpoint?
 
   private UserService userService;
-  private JWTService jwsService;
+  private JWTService jwtService;
+
+  public UserController() {
+    this.userService = new UserService();
+    this.jwtService = JWTService.getInstance();
+  }
 
   private Handler login = ctx -> {
     LoginDTO loginInfo = ctx.bodyAsClass(LoginDTO.class);
     User user = userService.login(loginInfo.getUsername(), loginInfo.getPassword());
-    String jwt = this.jwsService.createJWT(user);
+    String jwt = this.jwtService.createJWT(user);
 
     ctx.header("Access-Control-Expose-Headers", "*");
     ctx.header("Token", jwt);
