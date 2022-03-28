@@ -1,18 +1,28 @@
 package com.revature.service;
 
+import com.revature.dao.ReimbursementDao;
 import com.revature.model.Reimbursement;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class ReimbursementService {
+  private ReimbursementDao reimbursementDao;
 
+  public ReimbursementService() { this.reimbursementDao = new ReimbursementDao(); }
+  public ReimbursementService(ReimbursementDao mockDao) { this.reimbursementDao = mockDao; }
 
-  // need to be able to:
-  public List<Reimbursement> getAllReimbursements() {
-  }
   //get all reimb
+  public List<Reimbursement> getAllReimbursements() throws SQLException {
+    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimb();
+    return reimbursements;
+  }
 
   //get all by uid
+  public List<Reimbursement> getReimbByUser(int userId) throws SQLException {
+    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUser(userId);
+    return reimbursements;
+  }
 
   //add new reimb
 
