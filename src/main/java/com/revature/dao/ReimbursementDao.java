@@ -38,10 +38,15 @@ public class ReimbursementDao {
 
       ResultSet rs2 = ps2.executeQuery();
       rs2.next();
-      int sId = rs2.getInt("id");
+      int userId = rs2.getInt("id");
+      String username = rs.getString("username");
+      String password = rs.getString("password");
+      String userFirstName = rs.getString("user_first_name");
+      String userLastName = rs.getString("user_last_name");
+      String userEmail = rs.getString("user_email");
       String userRole = "employee";
 
-      User employee = new User(sId, userRole);
+      User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
       Calendar cal = Calendar.getInstance();
       Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
 
@@ -65,18 +70,37 @@ public class ReimbursementDao {
 
       while (rs2.next()) {
         int reimbId = rs2.getInt("reimb_id");
+        int reimbAmount = rs2.getInt("reimb_amount");
+        String reimbDescription = rs2.getString("reimb_description");
+        Timestamp reimbSubDate = rs2.getTimestamp("reimb_submitted");
+        Timestamp reimbResolvedDate = rs2.getTimestamp("reimb_resolved");
+        int type = rs2.getInt("type");
+        int status = rs2.getInt("status");
 
+        int eId = rs2.getInt("reimb_author");
+        String eUsername = rs2.getString("username");
+        String ePassword = rs2.getString("password");
+        String eUserFirstName = rs2.getString("user_first_name");
+        String eUserLastName = rs2.getString("user_last_name");
+        String eUserEmail = rs2.getString("user_email");
+        String eUserRole = "employee";
 
-        int sId = rs2.getInt("reimb_author");
-        String userRole = "employee";
-
-        User employee = new User(sId, userRole);
+        User employee = new User(eId, eUsername, ePassword, eUserFirstName, eUserLastName, eUserEmail, eUserRole);
 
         int mId = rs2.getInt("reimb_resolver");
-        String userRole = "employee";
+        String mUsername = rs2.getString("username");
+        String mPassword = rs2.getString("password");
+        String mUserFirstName = rs2.getString("user_first_name");
+        String mUserLastName = rs2.getString("user_last_name");
+        String mUserEmail = rs2.getString("user_email");
+        String mUserRole = "finance manager";
 
-        User manager = new User(mId, userRole);
+        User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
+
+        Reimbursement r = new Reimbursement(reimbId, reimbAmount, reimbDescription, reimbSubDate, reimbResolvedDate, employee, manager, type, status);
+        reimbursements.add(r);
       }
+      return reimbursements;
     }
   }
 
@@ -130,12 +154,43 @@ public class ReimbursementDao {
           "ON reimb_status_id = reimbursement_status.id LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver" +
           "WHERE id = ?";
 
-      PreparedStatement ps = con.prepareStatement(sql2);
-      ps.setInt(1, reimbId);
-      ResultSet rs = ps.executeQuery();
+      PreparedStatement ps2 = con.prepareStatement(sql2);
+      ps2.setInt(1, reimbId);
+      ResultSet rs2 = ps.executeQuery();
 
-      rs.next();
+      rs2.next();
+      int rId = rs2.getInt("reimb_id");
+      int reimbAmount = rs2.getInt("reimb_amount");
+      String reimbDescription = rs2.getString("reimb_description");
+      Timestamp reimbSubDate = rs2.getTimestamp("reimb_submitted");
+      Timestamp reimbResolvedDate = rs2.getTimestamp("reimb_resolved");
+      int type = rs2.getInt("type");
+      int rStatus = rs2.getInt("status");
 
+      int eId = rs2.getInt("reimb_author");
+      String eUsername = rs2.getString("username");
+      String ePassword = rs2.getString("password");
+      String eUserFirstName = rs2.getString("user_first_name");
+      String eUserLastName = rs2.getString("user_last_name");
+      String eUserEmail = rs2.getString("user_email");
+      String eUserRole = "employee";
+
+      User employee = new User(eId, eUsername, ePassword, eUserFirstName, eUserLastName, eUserEmail, eUserRole);
+
+      int mId = rs2.getInt("reimb_resolver");
+      String mUsername = rs2.getString("username");
+      String mPassword = rs2.getString("password");
+      String mUserFirstName = rs2.getString("user_first_name");
+      String mUserLastName = rs2.getString("user_last_name");
+      String mUserEmail = rs2.getString("user_email");
+      String mUserRole = "finance manager";
+
+      User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
+
+      Reimbursement r = new Reimbursement(rId, reimbAmount, reimbDescription, reimbSubDate, reimbResolvedDate, employee, manager, type, rStatus);
+
+      con.commit();
+      return r;
     }
   }
 }
