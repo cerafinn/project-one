@@ -7,12 +7,12 @@ public class addReimbursementDTO {
 
   private int remitAmount;
   private String remitDescription;
-  private String remitType;
+  private int remitType;
   private InputStream receipt;
 
   public AddReimbursementDTO() {}
 
-  public AddReimbursementDTO(int remitAmount, String remitDescription, String remitType, InputStream receipt) {
+  public AddReimbursementDTO(int remitAmount, String remitDescription, int remitType, InputStream receipt) {
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
     this.remitType = remitType;
@@ -35,11 +35,11 @@ public class addReimbursementDTO {
     this.remitDescription = remitDescription;
   }
 
-  public String getRemitType() {
+  public int getRemitType() {
     return remitType;
   }
 
-  public void setRemitType(String remitType) {
+  public void setRemitType(int remitType) {
     this.remitType = remitType;
   }
 

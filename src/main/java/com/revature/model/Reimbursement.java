@@ -13,10 +13,10 @@ public class Reimbursement {
   //  reimb_receipt bytea,
   private User employee;
   private User manager;
-  private String type;
-  private String status;
+  private int type;
+  private int status;
 
-  public Reimbursement(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, User employee, User manager, String type, String status) {
+  public Reimbursement(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, User employee, User manager, int type, int status) {
     this.id = id;
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
@@ -84,19 +84,19 @@ public class Reimbursement {
     this.manager = manager;
   }
 
-  public String getType() {
+  public int getType() {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(int type) {
     this.type = type;
   }
 
-  public String getStatus() {
+  public int getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(int status) {
     this.status = status;
   }
 

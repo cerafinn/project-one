@@ -43,15 +43,16 @@ CREATE TABLE reimbursement_status (
 
 INSERT INTO reimbursement_status (status) VALUES
 ('pending'),
-('denied'),
-('approved');
+('approved'),
+('denied');
 
 CREATE TABLE reimbursement (
 	id SERIAL PRIMARY KEY,
 	reimb_amount INTEGER NOT NULL,
-	reimb_submitted TIMESTAMP NOT NULL,
+	reimb_submitted TIMESTAMP NOT NULL ,
 	reimb_resolved TIMESTAMP NOT NULL,
 	reimb_description VARCHAR(250) NOT NULL,
+	reimb_receipt bytea,
 	reimb_author INTEGER NOT NULL,
 	CONSTRAINT fk_reimbursement_reimbauthor FOREIGN KEY (reimb_author) REFERENCES users(id),
 	reimb_resolver INTEGER,
@@ -61,6 +62,7 @@ CREATE TABLE reimbursement (
 	reimb_status_id INTEGER NOT NULL,
 	CONSTRAINT fk_reimbursement_reimbstatus FOREIGN KEY (reimb_status_id) REFERENCES reimbursement_status(id)
 );
+
 
 SELECT * FROM user_roles;
 SELECT * FROM reimbursement_status;
