@@ -1,6 +1,6 @@
 package com.revature.dao;
 
-import com.revature.dto.addReimbursementDTO;
+import com.revature.dto.AddReimbursementDTO;
 import com.revature.model.Reimbursement;
 import com.revature.model.User;
 import com.revature.utility.ConnectionUtility;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ReimbursementDao {
 
   //add reimbursement
-  public Reimbursement addReimburement(int employeeId, addReimbursementDTO dto) throws SQLException {
+  public Reimbursement addReimburement(int employeeId, AddReimbursementDTO dto) throws SQLException {
     try (Connection con = ConnectionUtility.getConnection()) {
       con.setAutoCommit(false);
       String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_type, reimb_receipt, reimb_author) VALUES (?, ?, ?, ?, ?)";

@@ -3,7 +3,7 @@ package com.revature.dto;
 import java.io.InputStream;
 import java.util.Objects;
 
-public class addReimbursementDTO {
+public class AddReimbursementDTO {
 
   private int remitAmount;
   private String remitDescription;
@@ -54,8 +54,8 @@ public class addReimbursementDTO {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof addReimbursementDTO)) return false;
-    addReimbursementDTO reimb = (addReimbursementDTO) o;
+    if (!(o instanceof AddReimbursementDTO)) return false;
+    AddReimbursementDTO reimb = (AddReimbursementDTO) o;
     return Objects.equals(remitAmount, reimb.remitAmount) && Objects.equals(remitDescription, reimb.remitDescription) && Objects.equals(remitType, reimb.remitType)
         && Objects.equals(receipt, reimb.receipt);
   }
