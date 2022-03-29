@@ -24,7 +24,11 @@ public class ReimbursementController implements Controller {
     this.jwtService = JWTService.getInstance();
   }
 
-  private Handler getallReimbursements = ctx -> {
+  private Handler getallReimbursements = (ctx) -> {
+    if(ctx.header("Authorization") == null) {
+      throw new UnauthorizedResponse("You must be logged in to view reimbursements");
+    }
+
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
 
@@ -36,7 +40,11 @@ public class ReimbursementController implements Controller {
     ctx.json(reimbursements);
   };
 
-  private Handler getReimbursementsByUser = ctx -> {
+  private Handler getReimbursementsByUser = (ctx) -> {
+    if(ctx.header("Authorization") == null) {
+      throw new UnauthorizedResponse("You must be logged in to view reimbursements");
+    }
+
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
     String userId = ctx.pathParam("user_id");
@@ -55,7 +63,11 @@ public class ReimbursementController implements Controller {
     ctx.json(dtos);
   };
 
-  private Handler addReimburement =  ctx -> {
+  private Handler addReimburement =  (ctx) -> {
+    if(ctx.header("Authorization") == null) {
+      throw new UnauthorizedResponse("You must be logged in to view reimbursements");
+    }
+
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
 
@@ -91,7 +103,7 @@ public class ReimbursementController implements Controller {
     ctx.json(reimbursement);
   };
 
-  private Handler getReimbReceipt = ctx -> {
+  private Handler getReimbReceipt = (ctx) -> {
     String rId = ctx.pathParam("reimbId");
     InputStream receipt = this.reimbursementService.getReceipt(rId);
     Tika tika = new Tika();

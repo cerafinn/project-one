@@ -13,7 +13,9 @@ public class UserDao {
 
   public User getUserByLogin(String username, String password) throws SQLException {
     try (Connection conn = ConnectionUtility.getConnection()) {
-      String sql = "SELECT users.id, users.username, users.password, user_role.role FROM users INNER JOIN user_role ON users.user_role_id = user_role.id WHERE users.username = ? AND users.password = ?";
+      String sql = "SELECT users.id, users.username, users.password, users.user_first_name, users.user_last_name, users.user_email, " +
+          "user_roles.role FROM users INNER JOIN user_roles ON users.user_role_id = user_roles.id " +
+          "WHERE users.username = ? AND users.password = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, username);

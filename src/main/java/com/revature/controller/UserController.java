@@ -31,5 +31,6 @@ public class UserController implements Controller {
   @Override
   public void mapEndpoints(Javalin app) {
   app.post("/login", login);
+  app.get("/test", (ctx) -> ctx.result("testing"));
   }
 }

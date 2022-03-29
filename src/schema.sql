@@ -24,6 +24,15 @@ CREATE TABLE users (
 	CONSTRAINT fk_user_userrole FOREIGN KEY (user_role_id) REFERENCES user_roles(id)
 );
 
+INSERT INTO users (username, password, user_first_name, user_last_name, user_email, user_role_id) VALUES
+('jdoe', 'pass123', 'John', 'Doe', 'jdoe@test.com', '1'),
+('mmonroe', 'pass12345', 'Mike', 'Monroe', 'mmunroe@test.com', '1'),
+('taiden', 'password123', 'Tom', 'Aiden', 'taiden@test.com', '1'),
+('lourdsarah', 'password12345', 'Sarah', 'Lourd', 'lourd@test.com', '2'),
+('afruit', 'pass123', 'Amber', 'Frem', 'afrem@test.com', '2');
+
+SELECT users.id AS id, username, password, user_first_name AS first_name, user_last_name AS last_name, user_email AS email, user_roles.role FROM users LEFT JOIN user_roles ON user_roles.id = user_role_id;
+
 --create reimbursement table, along with remit type and status
 CREATE TABLE reimbursement_type (
 	id SERIAL PRIMARY KEY,
@@ -49,8 +58,8 @@ INSERT INTO reimbursement_status (status) VALUES
 CREATE TABLE reimbursement (
 	id SERIAL PRIMARY KEY,
 	reimb_amount INTEGER NOT NULL,
-	reimb_submitted TIMESTAMP NOT NULL ,
-	reimb_resolved TIMESTAMP NOT NULL,
+	reimb_submitted TIMESTAMP,
+	reimb_resolved TIMESTAMP,
 	reimb_description VARCHAR(250) NOT NULL,
 	reimb_receipt bytea,
 	reimb_author INTEGER NOT NULL,
@@ -63,7 +72,23 @@ CREATE TABLE reimbursement (
 	CONSTRAINT fk_reimbursement_reimbstatus FOREIGN KEY (reimb_status_id) REFERENCES reimbursement_status(id)
 );
 
+INSERT INTO reimbursement (reimb_amount, reimb_description, reimb_author, reimb_resolver, reimb_type_id, reimb_status_id) VALUES
+('400', '3-day hotel stay', 1, NULL, 1, 1),
+('100', 'evening restaurant', 1, NULL, 3, 1),
+('1000', 'flight back to hq', 3, 4, 2, 2),
+('400', '3-day hotel stay', 2, NULL, 3, 1),
+('400', '3-day hotel stay', 1, 5, 4, 3),
+('400', '3-day hotel stay', 1, 4, 4, 2);
+
 
 SELECT * FROM user_roles;
+SELECT * FROM users;
 SELECT * FROM reimbursement_status;
 SELECT * FROM reimbursement_type;
+SELECT * FROM reimbursement;
+
+SELECT reimbursement.id AS id, reimb_amount AS amount, reimb_description AS description, reimbursement_type.type AS type, reimbursement_status.status AS status,
+CONCAT(reimb_author.user_first_name, ' ', reimb_author.user_last_name) AS employee,  CONCAT(reimb_resolver.user_first_name, ' ', reimb_resolver.user_last_name) AS manager,
+reimb_submitted AS submitted, reimb_resolved AS resolved
+FROM reimbursement LEFT JOIN reimbursement_type ON reimb_type_id = reimbursement_type.id LEFT JOIN reimbursement_status ON reimb_status_id = reimbursement_status.id
+LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver;

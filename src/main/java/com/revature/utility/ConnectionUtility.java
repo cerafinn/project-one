@@ -7,8 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionUtility {
-  private ConnectionUtility() {
-  }
 
   public static Connection getConnection() throws SQLException {
     String url = System.getenv("db_url");
@@ -16,7 +14,6 @@ public class ConnectionUtility {
     String password = System.getenv("db_password");
 
     DriverManager.registerDriver(new Driver());
-    Connection connection = DriverManager.getConnection(url, username, password);
-    return connection;
+    return DriverManager.getConnection(url, username, password);
   }
 }
