@@ -10,7 +10,6 @@ public class Reimbursement {
   private Timestamp remitSubmitted;
   private Timestamp remitResolved;
   private String remitDescription;
-  //  reimb_receipt bytea,
   private User employee;
   private User manager;
   private int type;

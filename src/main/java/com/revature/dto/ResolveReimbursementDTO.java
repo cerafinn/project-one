@@ -16,11 +16,15 @@ public class ResolveReimbursementDTO {
   private int status;
 
   private String employeeUsername;
+  private String employeeFirstName;
+  private String employeeLastName;
   private String managerUsername;
+  private String managerFirstName;
+  private String managerLastName;
 
   public ResolveReimbursementDTO() {}
 
-  public ResolveReimbursementDTO(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, int type, int status, String employeeUsername, String managerUsername) {
+  public ResolveReimbursementDTO(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, int type, int status, String employeeUsername, String employeeFirstName, String employeeLastName, String managerUsername, String managerFirstName, String managerLastName) {
     this.id = id;
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
@@ -29,7 +33,11 @@ public class ResolveReimbursementDTO {
     this.type = type;
     this.status = status;
     this.employeeUsername = employeeUsername;
+    this.employeeFirstName = employeeFirstName;
+    this.employeeLastName = employeeLastName;
     this.managerUsername = managerUsername;
+    this.managerFirstName = managerFirstName;
+    this.managerLastName = managerLastName;
   }
 
   public int getId() {
@@ -96,12 +104,44 @@ public class ResolveReimbursementDTO {
     this.employeeUsername = employeeUsername;
   }
 
+  public String getEmployeeFirstName() {
+    return employeeFirstName;
+  }
+
+  public void setEmployeeFirstName(String employeeFirstName) {
+    this.employeeFirstName = employeeFirstName;
+  }
+
+  public String getEmployeeLastName() {
+    return employeeLastName;
+  }
+
+  public void setEmployeeLastName(String employeeLastName) {
+    this.employeeLastName = employeeLastName;
+  }
+
   public String getManagerUsername() {
     return managerUsername;
   }
 
   public void setManagerUsername(String managerUsername) {
     this.managerUsername = managerUsername;
+  }
+
+  public String getManagerFirstName() {
+    return managerFirstName;
+  }
+
+  public void setManagerFirstName(String managerFirstName) {
+    this.managerFirstName = managerFirstName;
+  }
+
+  public String getManagerLastName() {
+    return managerLastName;
+  }
+
+  public void setManagerLastName(String managerLastName) {
+    this.managerLastName = managerLastName;
   }
 
   @Override

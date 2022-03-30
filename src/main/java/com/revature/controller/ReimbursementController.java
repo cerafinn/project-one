@@ -96,7 +96,7 @@ public class ReimbursementController implements Controller {
     dto.setRemitType(remitType);
 
     UploadedFile upload = ctx.uploadedFile("receipt");
-    InputStream receipt = upload.getContent() ;
+    InputStream receipt = upload.getContent();
     dto.setReceipt(receipt);
 
     ResolveReimbursementDTO reimbursement = this.reimbursementService.addNewReimb(id, dto);

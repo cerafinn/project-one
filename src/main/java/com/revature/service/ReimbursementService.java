@@ -27,7 +27,9 @@ public class ReimbursementService {
 
     for(Reimbursement reimbursement : reimbursements) {
       reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
-          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(), reimbursement.getEmployee().getUsername(), reimbursement.getManager().getUsername()));
+          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
     }
     return reimbDTOs;
   }
@@ -40,7 +42,8 @@ public class ReimbursementService {
     for(Reimbursement reimbursement : reimbursements) {
       reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
           reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
-          reimbursement.getEmployee().getUsername(), reimbursement.getManager().getUsername()));
+          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
     }
     return reimbDTOs;
   }
@@ -50,12 +53,13 @@ public class ReimbursementService {
     Tika tika = new Tika();
     String mimeType = tika.detect(dto.getReceipt());
 
-    if(!mimeType.equals("image/jpeg") && !mimeType.equals("image/png") && !mimeType.equals("image/gif")) {
+    if(!mimeType.equals("image/jpg") && !mimeType.equals("image/jpeg") && !mimeType.equals("image/png") && !mimeType.equals("image/gif")) {
       throw new InvalidImageException("Image must be one of: JPEG, PNG or GIF");
     }
     Reimbursement addedReimb = this.reimbursementDao.addReimburement(employeeId, dto);
     return new ResolveReimbursementDTO(addedReimb.getId(), addedReimb.getRemitAmount(), addedReimb.getRemitDrescription(),
-        addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(), null);
+        addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(),
+        addedReimb.getEmployee().getUserFirstName(), addedReimb.getEmployee().getUserLastName(), null, null, null);
   }
 
   //update (resolve) reimb
@@ -66,7 +70,8 @@ public class ReimbursementService {
 
       Reimbursement reimb = this.reimbursementDao.updateReimbStatus(intReimbId, intStatus, resolverId);
       return new ResolveReimbursementDTO(reimb.getId(), reimb.getRemitAmount(), reimb.getRemitDrescription(), reimb.getRemitSubmitted(),
-          reimb.getRemitResolved(), reimb.getType(), reimb.getStatus(), reimb.getEmployee().getUsername(), reimb.getManager().getUsername());
+          reimb.getRemitResolved(), reimb.getType(), reimb.getStatus(), reimb.getEmployee().getUsername(), reimb.getEmployee().getUserFirstName(),
+          reimb.getEmployee().getUserLastName(), reimb.getManager().getUsername(), reimb.getManager().getUserFirstName(), reimb.getManager().getUserLastName());
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Reimbursement id must by a numerical value");
     }
