@@ -17,42 +17,45 @@ public class ReimbursementDao {
   public Reimbursement addReimburement(int employeeId, AddReimbursementDTO dto) throws SQLException {
     try (Connection con = ConnectionUtility.getConnection()) {
       con.setAutoCommit(false);
-      String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_type, reimb_receipt, reimb_author) VALUES (?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_type_id, reimb_status_id, reimb_receipt, reimb_author) " +
+          "VALUES (?, ?, ?, ?, ?, ?)";
 
-      PreparedStatement ps = con.prepareStatement(sql);
-      ps.setInt(1, dto.getRemitAmount());
-      ps.setString(2, dto.getRemitDescription());
-      ps.setInt(3, dto.getRemitType());
-      ps.setBinaryStream(4, dto.getReceipt());
-      ps.setInt(5, employeeId);
+      try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        ps.setInt(1, dto.getRemitAmount());
+        ps.setString(2, dto.getRemitDescription());
+        ps.setInt(3, dto.getRemitType());
+        ps.setInt(4, 1);
+        ps.setBinaryStream(5, dto.getReceipt());
+        ps.setInt(6, employeeId);
 
-      ps.executeUpdate();
-      ResultSet rs = ps.getGeneratedKeys();
-      rs.next();
-      int reimbId = rs.getInt(1);
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        int reimbId = rs.getInt(1);
 
+        String sql2 = "SELECT * FROM users WHERE id = ?";
 
-      String sql2 = "SELECT * FROM users WHERE id = ?";
-      PreparedStatement ps2 = con.prepareStatement(sql2);
-      ps.setInt(1, employeeId);
+        try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
+          ps2.setInt(1, employeeId);
+          ResultSet rs2 = ps2.executeQuery();
+          rs2.next();
+          int userId = rs2.getInt("id");
+          String username = rs2.getString("username");
+          String password = rs2.getString("password");
+          String userFirstName = rs2.getString("user_first_name");
+          String userLastName = rs2.getString("user_last_name");
+          String userEmail = rs2.getString("user_email");
+          String userRole = "employee";
 
-      ResultSet rs2 = ps2.executeQuery();
-      rs2.next();
-      int userId = rs2.getInt("id");
-      String username = rs.getString("username");
-      String password = rs.getString("password");
-      String userFirstName = rs.getString("user_first_name");
-      String userLastName = rs.getString("user_last_name");
-      String userEmail = rs.getString("user_email");
-      String userRole = "employee";
+          User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
+          Calendar cal = Calendar.getInstance();
+          Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
 
-      User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
-      Calendar cal = Calendar.getInstance();
-      Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
-
-      Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
-      con.commit();
-      return reimb;
+          Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
+          con.commit();
+          return reimb;
+        }
+      }
     }
   }
 
@@ -114,37 +117,38 @@ public class ReimbursementDao {
           "reimbursement.reimb_resolver AS reimb_resolver, reimb_resolver.user_first_name AS m_first_name, reimb_resolver.user_last_name AS m_last_name, reimb_resolver.username AS m_username, reimb_resolver.password AS m_password, reimb_resolver.user_email AS m_email, " +
           "reimb_submitted AS submitted, reimb_resolved AS resolved FROM reimbursement " +
           "LEFT JOIN reimbursement_type ON reimb_type_id = reimbursement_type.id LEFT JOIN reimbursement_status ON reimb_status_id = reimbursement_status.id " +
-          "LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver, " +
+          "LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver " +
           "WHERE reimb_author = ?";
 
       PreparedStatement ps = con.prepareStatement(sql);
+      ps.setInt(1, userId);
       ResultSet rs = ps.executeQuery();
 
       while (rs.next()) {
         int reimbId = rs.getInt("reimb_id");
-        int reimbAmount = rs.getInt("reimb_amount");
-        String reimbDescription = rs.getString("reimb_description");
-        Timestamp reimbSubDate = rs.getTimestamp("reimb_submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("reimb_resolved");
+        int reimbAmount = rs.getInt("amount");
+        String reimbDescription = rs.getString("description");
+        Timestamp reimbSubDate = rs.getTimestamp("submitted");
+        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
         int type = rs.getInt("type");
         int status = rs.getInt("status");
 
         int eId = rs.getInt("reimb_author");
-        String eUsername = rs.getString("username");
-        String ePassword = rs.getString("password");
-        String eUserFirstName = rs.getString("user_first_name");
-        String eUserLastName = rs.getString("user_last_name");
-        String eUserEmail = rs.getString("user_email");
+        String eUsername = rs.getString("e_username");
+        String ePassword = rs.getString("e_password");
+        String eUserFirstName = rs.getString("e_first_name");
+        String eUserLastName = rs.getString("e_last_name");
+        String eUserEmail = rs.getString("e_email");
         String eUserRole = "employee";
 
         User employee = new User(eId, eUsername, ePassword, eUserFirstName, eUserLastName, eUserEmail, eUserRole);
 
         int mId = rs.getInt("reimb_resolver");
-        String mUsername = rs.getString("username");
-        String mPassword = rs.getString("password");
-        String mUserFirstName = rs.getString("user_first_name");
-        String mUserLastName = rs.getString("user_last_name");
-        String mUserEmail = rs.getString("user_email");
+        String mUsername = rs.getString("m_username");
+        String mPassword = rs.getString("m_password");
+        String mUserFirstName = rs.getString("m_first_name");
+        String mUserLastName = rs.getString("m_last_name");
+        String mUserEmail = rs.getString("m_email");
         String mUserRole = "finance manager";
 
         User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
@@ -180,58 +184,61 @@ public class ReimbursementDao {
       con.setAutoCommit(false);
       String sql = "UPDATE reimbursement SET reimb_status_id = ?, reimb_resolver = ? WHERE id = ?";
 
-      PreparedStatement ps = con.prepareStatement(sql);
-      ps.setInt(1, status);
-      ps.setInt(2, managerId);
-      ps.setInt(3, reimbId);
+      try(PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, status);
+        ps.setInt(2, managerId);
+        ps.setInt(3, reimbId);
 
-      ps.executeUpdate();
+        ps.executeUpdate();
 
-      String sql2 = "SELECT reimbursement.id AS reimb_id, reimb_amount AS amount, reimb_description AS description, reimbursement.reimb_type_id AS type, reimbursement.reimb_status_id AS status, " +
-          "reimbursement.reimb_author AS reimb_author, reimb_author.user_first_name AS e_first_name, reimb_author.user_last_name AS e_last_name, reimb_author.username AS e_username, reimb_author.password AS e_password, reimb_author.user_email AS e_email, " +
-          "reimbursement.reimb_resolver AS reimb_resolver, reimb_resolver.user_first_name AS m_first_name, reimb_resolver.user_last_name AS m_last_name, reimb_resolver.username AS m_username, reimb_resolver.password AS m_password, reimb_resolver.user_email AS m_email, " +
-          "reimb_submitted AS submitted, reimb_resolved AS resolved FROM reimbursement " +
-          "LEFT JOIN reimbursement_type ON reimb_type_id = reimbursement_type.id LEFT JOIN reimbursement_status ON reimb_status_id = reimbursement_status.id " +
-          "LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver, " +
-          "WHERE reimb_id = ?";
+        String sql2 = "SELECT reimbursement.id AS reimb_id, reimb_amount AS amount, reimb_description AS description, reimbursement.reimb_type_id AS type, reimbursement.reimb_status_id AS status, " +
+            "reimbursement.reimb_author AS reimb_author, reimb_author.user_first_name AS e_first_name, reimb_author.user_last_name AS e_last_name, reimb_author.username AS e_username, reimb_author.password AS e_password, reimb_author.user_email AS e_email, " +
+            "reimbursement.reimb_resolver AS reimb_resolver, reimb_resolver.user_first_name AS m_first_name, reimb_resolver.user_last_name AS m_last_name, reimb_resolver.username AS m_username, reimb_resolver.password AS m_password, reimb_resolver.user_email AS m_email, " +
+            "reimb_submitted AS submitted, reimb_resolved AS resolved FROM reimbursement " +
+            "LEFT JOIN reimbursement_type ON reimb_type_id = reimbursement_type.id LEFT JOIN reimbursement_status ON reimb_status_id = reimbursement_status.id " +
+            "LEFT JOIN users reimb_author ON reimb_author.id = reimb_author LEFT JOIN users reimb_resolver ON reimb_resolver.id = reimb_resolver " +
+            "WHERE reimbursement.id = ?";;
 
-      PreparedStatement ps2 = con.prepareStatement(sql2);
-      ps2.setInt(1, reimbId);
-      ResultSet rs2 = ps.executeQuery();
+        try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
+          ps2.setInt(1, reimbId);
+          ResultSet rs2 = ps2.executeQuery();
 
-      rs2.next();
-      int rId = rs2.getInt("reimb_id");
-      int reimbAmount = rs2.getInt("reimb_amount");
-      String reimbDescription = rs2.getString("reimb_description");
-      Timestamp reimbSubDate = rs2.getTimestamp("reimb_submitted");
-      Timestamp reimbResolvedDate = rs2.getTimestamp("reimb_resolved");
-      int type = rs2.getInt("type");
-      int rStatus = rs2.getInt("status");
+          rs2.next();
+          int rId = rs2.getInt("reimb_id");
+          int reimbAmount = rs2.getInt("amount");
+          String reimbDescription = rs2.getString("description");
+          Timestamp reimbSubDate = rs2.getTimestamp("submitted");
+          Calendar cal = Calendar.getInstance();
+          Timestamp resolvedDate = new Timestamp(cal.getTimeInMillis());
+          int type = rs2.getInt("type");
+          int rStatus = rs2.getInt("status");
 
-      int eId = rs2.getInt("reimb_author");
-      String eUsername = rs2.getString("username");
-      String ePassword = rs2.getString("password");
-      String eUserFirstName = rs2.getString("user_first_name");
-      String eUserLastName = rs2.getString("user_last_name");
-      String eUserEmail = rs2.getString("user_email");
-      String eUserRole = "employee";
+          int eId = rs2.getInt("reimb_author");
+          String eUsername = rs2.getString("e_username");
+          String ePassword = rs2.getString("e_password");
+          String eUserFirstName = rs2.getString("e_first_name");
+          String eUserLastName = rs2.getString("e_last_name");
+          String eUserEmail = rs2.getString("e_email");
+          String eUserRole = "employee";
 
-      User employee = new User(eId, eUsername, ePassword, eUserFirstName, eUserLastName, eUserEmail, eUserRole);
+          User employee = new User(eId, eUsername, ePassword, eUserFirstName, eUserLastName, eUserEmail, eUserRole);
 
-      int mId = rs2.getInt("reimb_resolver");
-      String mUsername = rs2.getString("username");
-      String mPassword = rs2.getString("password");
-      String mUserFirstName = rs2.getString("user_first_name");
-      String mUserLastName = rs2.getString("user_last_name");
-      String mUserEmail = rs2.getString("user_email");
-      String mUserRole = "finance manager";
+          int mId = rs2.getInt("reimb_resolver");
+          String mUsername = rs2.getString("m_username");
+          String mPassword = rs2.getString("m_password");
+          String mUserFirstName = rs2.getString("m_first_name");
+          String mUserLastName = rs2.getString("m_last_name");
+          String mUserEmail = rs2.getString("m_email");
+          String mUserRole = "finance manager";
 
-      User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
+          User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
 
-      Reimbursement r = new Reimbursement(rId, reimbAmount, reimbDescription, reimbSubDate, reimbResolvedDate, employee, manager, type, rStatus);
+          Reimbursement r = new Reimbursement(rId, reimbAmount, reimbDescription, reimbSubDate, resolvedDate, employee, manager, type, rStatus);
 
-      con.commit();
-      return r;
+          con.commit();
+          return r;
+        }
+      }
     }
   }
 }

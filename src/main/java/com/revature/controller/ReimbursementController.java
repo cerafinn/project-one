@@ -47,15 +47,15 @@ public class ReimbursementController implements Controller {
 
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
-    String userId = ctx.pathParam("user_id");
-    int id = Integer.parseInt(userId);
 
     //change this so that managers can filter by employee?
     if(!token.getBody().get("user_role").equals("employee")) {
       throw new UnauthorizedResponse("Unable to return information for a single employee");
     }
 
-    if(!token.getBody().get("user_id").equals(userId)) {
+    String userId = ctx.pathParam("user_id");
+    int id = Integer.parseInt(userId);
+    if(!token.getBody().get("user_id").equals(id)) {
       throw new UnauthorizedResponse("You can only retrieve your own reimbursements");
     }
 
@@ -96,7 +96,7 @@ public class ReimbursementController implements Controller {
     dto.setRemitType(remitType);
 
     UploadedFile upload = ctx.uploadedFile("receipt");
-    InputStream receipt = upload.getContent();
+    InputStream receipt = upload.getContent() ;
     dto.setReceipt(receipt);
 
     ResolveReimbursementDTO reimbursement = this.reimbursementService.addNewReimb(id, dto);
@@ -131,8 +131,8 @@ public class ReimbursementController implements Controller {
   @Override
   public void mapEndpoints(Javalin app) {
   app.get("/reimbursements", getallReimbursements);
-  app.get("/users/{userid}/reimbursements", getReimbursementsByUser);
-  app.post("/reimbursements", addReimburement);
+  app.get("/users/{user_id}/reimbursements", getReimbursementsByUser);
+  app.post("/users/{user_id}/reimbursements", addReimburement);
   app.get("reimbursements/{reimbId}/receipt", getReimbReceipt);
   app.patch("reimbursements/{reimbId}", resolveReimbursement);
   }
