@@ -7,13 +7,13 @@ import com.revature.service.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
-public class UserController implements Controller {
+public class AuthController implements Controller {
   // do we need a user controller -- will it just be the login endpoint?
 
   private UserService userService;
   private JWTService jwtService;
 
-  public UserController() {
+  public AuthController() {
     this.userService = new UserService();
     this.jwtService = JWTService.getInstance();
   }

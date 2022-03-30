@@ -1,9 +1,9 @@
 package com.revature.main;
 
+import com.revature.controller.AuthController;
 import com.revature.controller.Controller;
 import com.revature.controller.ExceptionController;
 import com.revature.controller.ReimbursementController;
-import com.revature.controller.UserController;
 import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class Driver {
     });
 
     app.before((ctx) -> { logger.info(ctx.method() + " request received for " + ctx.path()); });
-    mapControllers(app, new UserController(), new ReimbursementController(), new ExceptionController());
+    mapControllers(app, new AuthController(), new ReimbursementController(), new ExceptionController());
     app.start(8081);
   }
 

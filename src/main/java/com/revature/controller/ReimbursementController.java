@@ -32,7 +32,7 @@ public class ReimbursementController implements Controller {
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
 
-    if(!token.getBody().get("user_role").equals("manager")) {
+    if(!token.getBody().get("user_role").equals("finance manager")) {
       throw new UnauthorizedResponse("You are not a finance manager");
     }
 
@@ -116,7 +116,7 @@ public class ReimbursementController implements Controller {
     String jwt = ctx.header("Authorization").split(" ")[1];
     Jws<Claims> token = this.jwtService.parseJwt(jwt);
 
-    if(!token.getBody().get("user_role").equals("manager")) {
+    if(!token.getBody().get("user_role").equals("finance manager")) {
       throw new UnauthorizedResponse("You are not a finance manager");
     }
 
