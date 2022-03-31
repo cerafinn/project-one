@@ -56,7 +56,7 @@ public class ReimbursementService {
     if(!mimeType.equals("image/jpg") && !mimeType.equals("image/jpeg") && !mimeType.equals("image/png") && !mimeType.equals("image/gif")) {
       throw new InvalidImageException("Image must be one of: JPEG, PNG or GIF");
     }
-    Reimbursement addedReimb = this.reimbursementDao.addReimburement(employeeId, dto);
+    Reimbursement addedReimb = this.reimbursementDao.addReimbursement(employeeId, dto);
     return new ResolveReimbursementDTO(addedReimb.getId(), addedReimb.getRemitAmount(), addedReimb.getRemitDrescription(),
         addedReimb.getRemitSubmitted(), addedReimb.getRemitResolved(), addedReimb.getType(), addedReimb.getStatus(), addedReimb.getEmployee().getUsername(),
         addedReimb.getEmployee().getUserFirstName(), addedReimb.getEmployee().getUserLastName(), null, null, null);
