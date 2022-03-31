@@ -17,23 +17,25 @@ public class ReimbursementDao {
   public Reimbursement addReimburement(int employeeId, AddReimbursementDTO dto) throws SQLException {
     try (Connection con = ConnectionUtility.getConnection()) {
       con.setAutoCommit(false);
-      String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_type_id, reimb_status_id, reimb_receipt, reimb_author) " +
-          "VALUES (?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_submitted, reimb_type_id, reimb_status_id, reimb_receipt, reimb_author) " +
+          "VALUES (?, ?, ?, ?, ?, ?. ?)";
 
       try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
         ps.setInt(1, dto.getRemitAmount());
         ps.setString(2, dto.getRemitDescription());
-        ps.setInt(3, dto.getRemitType());
-        ps.setInt(4, 1);
-        ps.setBinaryStream(5, dto.getReceipt());
-        ps.setInt(6, employeeId);
+        //TODO fix date
+        ps.setTimestamp(3, dto.getRemitSubmitted());
+        ps.setInt(4, dto.getRemitType());
+        ps.setInt(5, 1);
+        ps.setBinaryStream(6, dto.getReceipt());
+        ps.setInt(7, employeeId);
 
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
         int reimbId = rs.getInt(1);
 
-        String sql2 = "SELECT * FROM users WHERE id = ?";
+        String sql2 = "SELECT * FROM reimbursements WHERE id = ?";
 
         try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
           ps2.setInt(1, employeeId);
@@ -48,8 +50,9 @@ public class ReimbursementDao {
           String userRole = "employee";
 
           User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
-          Calendar cal = Calendar.getInstance();
-          Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
+//TODO fix date
+          long currentTime = System.currentTimeMillis();
+          String currentDate = new Timestamp(currentTime).toString();
 
           Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
           con.commit();
@@ -77,8 +80,9 @@ public class ReimbursementDao {
         int reimbId = rs.getInt("reimb_id");
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        // TODO fix date
+        String reimbSubDate = rs.getTimestamp("submitted").toString();
+        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
         int type = rs.getInt("type");
         int status = rs.getInt("status");
 
@@ -128,8 +132,9 @@ public class ReimbursementDao {
         int reimbId = rs.getInt("reimb_id");
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        // todo fix date
+        String reimbSubDate = rs.getTimestamp("submitted").toString();
+        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
         int type = rs.getInt("type");
         int status = rs.getInt("status");
 
@@ -207,9 +212,10 @@ public class ReimbursementDao {
           int rId = rs2.getInt("reimb_id");
           int reimbAmount = rs2.getInt("amount");
           String reimbDescription = rs2.getString("description");
-          Timestamp reimbSubDate = rs2.getTimestamp("submitted");
-          Calendar cal = Calendar.getInstance();
-          Timestamp resolvedDate = new Timestamp(cal.getTimeInMillis());
+//          TODO: fix time
+          String reimbSubDate = rs2.getTimestamp("submitted").toString();
+          long currentTime = System.currentTimeMillis();
+          String resolvedDate = new Timestamp(currentTime).toString();
           int type = rs2.getInt("type");
           int rStatus = rs2.getInt("status");
 
