@@ -99,8 +99,6 @@ public class ReimbursementController implements Controller {
       throw new UnauthorizedResponse("You can only submit your own reimbursement requests");
     }
 
-    //add information for reimbursement
-//    int remitAmount, String remitDescription, int remitType
     String rAmount = ctx.formParam("remitAmount");
     int remitAmount = Integer.parseInt(rAmount);
     String remitDescription = ctx.formParam("remitDescription");
