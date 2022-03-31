@@ -72,13 +72,13 @@ CREATE TABLE reimbursement (
 	CONSTRAINT fk_reimbursement_reimbstatus FOREIGN KEY (reimb_status_id) REFERENCES reimbursement_status(id)
 );
 
-INSERT INTO reimbursement (reimb_amount, reimb_description, reimb_author, reimb_resolver, reimb_type_id, reimb_status_id) VALUES
-('400', '3-day hotel stay', 1, NULL, 1, 1),
-('100', 'evening restaurant', 1, NULL, 3, 1),
-('1000', 'flight back to hq', 3, 4, 2, 2),
-('400', '3-day hotel stay', 2, NULL, 3, 1),
-('400', '3-day hotel stay', 1, 5, 4, 3),
-('400', '3-day hotel stay', 1, 4, 4, 2);
+INSERT INTO reimbursement (reimb_amount, reimb_description, reimb_submitted, reimb_resolved, reimb_author, reimb_resolver, reimb_type_id, reimb_status_id) VALUES
+('400', '3-day hotel stay', '2016-06-22 04:34:22.000', NULL, 1, NULL, 1, 1),
+('100', 'evening restaurant', '2016-06-22 04:34:22.000', NULL, 1, NULL, 3, 1),
+('1000', 'flight back to hq', '2016-06-22 04:34:22.000', '2016-06-22 04:34:22.000', 3, 4, 2, 2),
+('400', '3-day hotel stay', '2016-06-22 04:34:22.000', NULL, 2, NULL, 3, 1),
+('400', '3-day hotel stay', '2016-06-22 04:34:22.000', '2016-06-22 04:34:22.000', 1, 5, 4, 3),
+('400', '3-day hotel stay', '2016-06-22 04:34:22.000', '2016-06-22 04:34:22.000', 1, 4, 4, 2);
 
 
 SELECT * FROM user_roles;

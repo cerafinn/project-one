@@ -28,6 +28,10 @@ public class Reimbursement {
     this.status = status;
   }
 
+  public Reimbursement() {
+
+  }
+
   public int getId() {
     return id;
   }
