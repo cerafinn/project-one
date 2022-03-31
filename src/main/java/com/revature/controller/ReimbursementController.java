@@ -14,6 +14,7 @@ import org.apache.tika.Tika;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class ReimbursementController implements Controller {
   private ReimbursementService reimbursementService;
@@ -36,7 +37,15 @@ public class ReimbursementController implements Controller {
       throw new UnauthorizedResponse("You are not a finance manager");
     }
 
-    List<ResolveReimbursementDTO> reimbursements = reimbursementService.getAllReimbursements();
+    String status = ctx.queryParam("status");
+
+    Map<String, List<String>> queryMap = ctx.queryParamMap();
+    List<ResolveReimbursementDTO> reimbursements;
+    if(queryMap.containsKey("status")) {
+      reimbursements = reimbursementService.getAllReimbursementsByStatus(status);
+    } else {
+      reimbursements = reimbursementService.getAllReimbursements();
+    }
     ctx.json(reimbursements);
   };
 
@@ -59,8 +68,16 @@ public class ReimbursementController implements Controller {
       throw new UnauthorizedResponse("You can only retrieve your own reimbursements");
     }
 
-    List<ResolveReimbursementDTO> dtos = this.reimbursementService.getReimbByUser(id);
-    ctx.json(dtos);
+    String status = ctx.queryParam("status");
+
+    Map<String, List<String>> queryMap = ctx.queryParamMap();
+    if(queryMap.containsKey("status")) {
+      List<ResolveReimbursementDTO> reimbursements = reimbursementService.getReimbByUserAndStatus(id, status);
+      ctx.json(reimbursements);
+    } else {
+      List<ResolveReimbursementDTO> dtos = this.reimbursementService.getReimbByUser(id);
+      ctx.json(dtos);
+    }
   };
 
   private Handler addReimburement =  (ctx) -> {

@@ -90,4 +90,34 @@ public class ReimbursementService {
       throw new IllegalArgumentException("Invalid reimbursement or employee id");
     }
   }
+
+  public List<ResolveReimbursementDTO> getAllReimbursementsByStatus(String status) throws SQLException {
+    int intStatus = Integer.parseInt(status);
+
+    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByStatus(intStatus);
+    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+
+    for(Reimbursement reimbursement : reimbursements) {
+      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+    }
+    return reimbDTOs;
+  }
+
+  public List<ResolveReimbursementDTO> getReimbByUserAndStatus(int userId, String status) throws SQLException {
+    int intStatus = Integer.parseInt(status);
+    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUserAndStatus(userId, intStatus);
+    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+
+    for(Reimbursement reimbursement : reimbursements) {
+      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+    }
+    return reimbDTOs;
+
+  }
 }
