@@ -18,7 +18,7 @@ public class ReimbursementDao {
     try (Connection con = ConnectionUtility.getConnection()) {
       con.setAutoCommit(false);
       String sql = "INSERT INTO reimbursement(reimb_amount, reimb_description, reimb_submitted, reimb_type_id, reimb_status_id, reimb_receipt, reimb_author) " +
-          "VALUES (?, ?, ?, ?, ?, ?. ?)";
+          "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
       try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
         ps.setInt(1, dto.getRemitAmount());
@@ -35,7 +35,8 @@ public class ReimbursementDao {
         rs.next();
         int reimbId = rs.getInt(1);
 
-        String sql2 = "SELECT * FROM reimbursements WHERE id = ?";
+//        String sql2 = "SELECT * FROM reimbursement WHERE id = ?";
+          String sql2 = "SELECT * FROM users WHERE id = ?";
 
         try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
           ps2.setInt(1, employeeId);
