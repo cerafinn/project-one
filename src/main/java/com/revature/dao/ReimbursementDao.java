@@ -23,8 +23,10 @@ public class ReimbursementDao {
       try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
         ps.setInt(1, dto.getRemitAmount());
         ps.setString(2, dto.getRemitDescription());
-        //TODO fix date
+
+        //TODO fix date - need to rewrite/cast the expression
         ps.setString(3, dto.getRemitSubmitted());
+
         ps.setInt(4, dto.getRemitType());
         ps.setInt(5, 1);
         ps.setBinaryStream(6, dto.getReceipt());
