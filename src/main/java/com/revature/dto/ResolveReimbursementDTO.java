@@ -9,8 +9,8 @@ public class ResolveReimbursementDTO {
 
   private int id;
   private int remitAmount;
-  private Timestamp remitSubmitted;
-  private Timestamp remitResolved;
+  private String remitSubmitted;
+  private String remitResolved;
   private String remitDescription;
   private int type;
   private int status;
@@ -24,7 +24,7 @@ public class ResolveReimbursementDTO {
 
   public ResolveReimbursementDTO() {}
 
-  public ResolveReimbursementDTO(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, int type, int status, String employeeUsername, String employeeFirstName, String employeeLastName, String managerUsername, String managerFirstName, String managerLastName) {
+  public ResolveReimbursementDTO(int id, int remitAmount, String remitDescription, String remitSubmitted, String remitResolved, int type, int status, String employeeUsername, String employeeFirstName, String employeeLastName, String managerUsername, String managerFirstName, String managerLastName) {
     this.id = id;
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
@@ -56,19 +56,19 @@ public class ResolveReimbursementDTO {
     this.remitAmount = remitAmount;
   }
 
-  public Timestamp getRemitSubmitted() {
+  public String getRemitSubmitted() {
     return remitSubmitted;
   }
 
-  public void setRemitSubmitted(Timestamp remitSubmitted) {
+  public void setRemitSubmitted(String remitSubmitted) {
     this.remitSubmitted = remitSubmitted;
   }
 
-  public Timestamp getRemitResolved() {
+  public String getRemitResolved() {
     return remitResolved;
   }
 
-  public void setRemitResolved(Timestamp remitResolved) {
+  public void setRemitResolved(String remitResolved) {
     this.remitResolved = remitResolved;
   }
 
