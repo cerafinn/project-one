@@ -149,8 +149,21 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // todo fix date
-        String reimbSubDate = rs.getTimestamp("submitted").toString();
-        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
+        Timestamp timestamp = rs.getTimestamp("submitted");
+        String reimbSubDate;
+        if (timestamp == null) {
+          reimbSubDate = null;
+        } else {
+          reimbSubDate = timestamp.toString();
+        }
+
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if (timestamp2 == null) {
+          reimbResolvedDate = null;
+        } else {
+          reimbResolvedDate = timestamp.toString();
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -231,7 +244,14 @@ public class ReimbursementDao {
           String reimbDescription = rs2.getString("description");
 
           // TODO: fix time
-          String reimbSubDate = rs2.getTimestamp("submitted").toString();
+          Timestamp timestamp = rs2.getTimestamp("submitted");
+          String reimbSubDate;
+          if (timestamp == null) {
+            reimbSubDate = null;
+          } else {
+            reimbSubDate = timestamp.toString();
+          }
+
           Calendar cal = Calendar.getInstance();
           String reimbResolvedDate = new Timestamp(cal.getTimeInMillis()).toString();
 
@@ -288,8 +308,21 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // TODO fix date
-        String reimbSubDate = rs.getTimestamp("submitted").toString();
-        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
+        Timestamp timestamp = rs.getTimestamp("submitted");
+        String reimbSubDate;
+        if (timestamp == null) {
+          reimbSubDate = null;
+        } else {
+          reimbSubDate = timestamp.toString();
+        }
+
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if (timestamp2 == null) {
+          reimbResolvedDate = null;
+        } else {
+          reimbResolvedDate = timestamp.toString();
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -343,8 +376,21 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // todo fix date
-        String reimbSubDate = rs.getTimestamp("submitted").toString();
-        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
+        Timestamp timestamp = rs.getTimestamp("submitted");
+        String reimbSubDate;
+        if (timestamp == null) {
+          reimbSubDate = null;
+        } else {
+          reimbSubDate = timestamp.toString();
+        }
+
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if (timestamp2 == null) {
+          reimbResolvedDate = null;
+        } else {
+          reimbResolvedDate = timestamp.toString();
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");

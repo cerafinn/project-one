@@ -124,6 +124,7 @@ public class ReimbursementController implements Controller {
     dto.setRemitDescription(remitDescription);
     dto.setRemitType(remitType);
 
+    // todo change to string and upload to cloud?
     UploadedFile upload = ctx.uploadedFile("receipt");
     InputStream receipt = upload.getContent();
     dto.setReceipt(receipt);
