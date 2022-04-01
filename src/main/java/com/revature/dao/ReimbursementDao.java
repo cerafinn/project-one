@@ -24,8 +24,8 @@ public class ReimbursementDao {
         ps.setInt(1, dto.getRemitAmount());
         ps.setString(2, dto.getRemitDescription());
 
-        //TODO fix date - need to rewrite/cast the expression
-        ps.setString(3, dto.getRemitSubmitted());
+        //TODO fix date - returning null in postman
+        ps.setTimestamp(3, dto.getRemitSubmitted());
 
         ps.setInt(4, dto.getRemitType());
         ps.setInt(5, 1);
@@ -53,7 +53,8 @@ public class ReimbursementDao {
           String userRole = "employee";
 
           User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
-//TODO fix date
+
+          //TODO fix date
           Calendar cal = Calendar.getInstance();
           String currentDate = new Timestamp(cal.getTimeInMillis()).toString();
 
@@ -245,7 +246,7 @@ public class ReimbursementDao {
           int reimbAmount = rs2.getInt("amount");
           String reimbDescription = rs2.getString("description");
 
-          // TODO: fix time
+          // TODO: fix time -- returning null in postman
           Timestamp timestamp = rs2.getTimestamp("submitted");
           String reimbSubDate;
           if (timestamp == null) {
