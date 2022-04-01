@@ -1,7 +1,5 @@
 package com.revature.model;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Reimbursement {
@@ -115,30 +113,28 @@ public class Reimbursement {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Reimbursement remit = (Reimbursement) o;
-    return id == remit.id && Objects.equals(remitAmount, remit.remitAmount) && Objects.equals(remitSubmitted, remit.remitSubmitted)
-        && Objects.equals(remitResolved, remit.remitResolved) && Objects.equals(remitDescription, remit.remitDescription)
-        && Objects.equals(employee, remit.employee) && Objects.equals(manager, remit.manager) && Objects.equals(type, remit.type)
-        && Objects.equals(status, remit.status);
+    if (!(o instanceof Reimbursement)) return false;
+    Reimbursement that = (Reimbursement) o;
+    return id == that.id && remitAmount == that.remitAmount && type == that.type && status == that.status && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(remitResolved, that.remitResolved) && remitDescription.equals(that.remitDescription) && employee.equals(that.employee) && Objects.equals(manager, that.manager);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, employee, manager, type, status);
   }
+
   @Override
   public String toString() {
-    return "User{" +
+    return "Reimbursement{" +
         "id=" + id +
-        ", remitAmount='" + remitAmount + '\'' +
+        ", remitAmount=" + remitAmount +
         ", remitSubmitted='" + remitSubmitted + '\'' +
         ", remitResolved='" + remitResolved + '\'' +
         ", remitDescription='" + remitDescription + '\'' +
-        ", employee='" + employee + '\'' +
-        ", manager='" + manager + '\'' +
-        ", type='" + type + '\'' +
-        ", status='" + status + '\'' +
+        ", employee=" + employee +
+        ", manager=" + manager +
+        ", type=" + type +
+        ", status=" + status +
         '}';
   }
 }

@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ReimbursementDao {
@@ -24,6 +23,7 @@ public class ReimbursementDao {
       try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
         ps.setInt(1, dto.getRemitAmount());
         ps.setString(2, dto.getRemitDescription());
+        //TODO fix date
         ps.setTimestamp(3, dto.getRemitSubmitted());
         ps.setInt(4, dto.getRemitType());
         ps.setInt(5, 1);
@@ -35,35 +35,33 @@ public class ReimbursementDao {
         rs.next();
         int reimbId = rs.getInt(1);
 
-        String sql2 = "SELECT reimb_submitted FROM reimbursement WHERE id = ?";
-        PreparedStatement ps2 = con.prepareStatement(sql2);
-        ps2.setInt(1, reimbId);
-        ResultSet rs2 = ps2.executeQuery();
-        rs2.next();
-        String currentDate = new Date(rs2.getTimestamp("reimb_submitted").getTime()).toString();
+//        String sql2 = "SELECT * FROM reimbursement WHERE id = ?";
+        String sql2 = "SELECT * FROM users WHERE id = ?";
 
-        String sql3 = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
+          ps2.setInt(1, employeeId);
+          ResultSet rs2 = ps2.executeQuery();
+          rs2.next();
+          int userId = rs2.getInt("id");
+          String username = rs2.getString("username");
+          String password = rs2.getString("password");
+          String userFirstName = rs2.getString("user_first_name");
+          String userLastName = rs2.getString("user_last_name");
+          String userEmail = rs2.getString("user_email");
+          String userRole = "employee";
 
-        PreparedStatement ps3 = con.prepareStatement(sql3);
-        ps3.setInt(1, employeeId);
-        ResultSet rs3 = ps3.executeQuery();
-        rs3.next();
-        int userId = rs3.getInt("id");
-        String username = rs3.getString("username");
-        String password = rs3.getString("password");
-        String userFirstName = rs3.getString("user_first_name");
-        String userLastName = rs3.getString("user_last_name");
-        String userEmail = rs3.getString("user_email");
-        String userRole = "employee";
+          User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
+//TODO fix date
+          Calendar cal = Calendar.getInstance();
+          Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
 
-        User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
-        Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
-        con.commit();
-        return reimb;
+          Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
+          con.commit();
+          return reimb;
+        }
       }
     }
   }
-
 
   //view reimbursement -- all, by uid
   public List<Reimbursement> getAllReimb() throws SQLException {
@@ -84,22 +82,10 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Timestamp timestamp = rs.getTimestamp("resolved");
-        String reimbSubDate;
-        if(timestamp != null) {
-          Date date = new Date(rs.getTimestamp("resolved").getTime());
-          reimbSubDate = date.toString();
-        } else {
-          reimbSubDate = null;
-        }
-        Timestamp timestamp2 = rs.getTimestamp("resolved");
-        String reimbResolvedDate;
-        if(timestamp2 != null) {
-          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-          reimbResolvedDate = date2.toString();
-        } else {
-          reimbResolvedDate = null;
-        }
+
+        // TODO fix date
+        Timestamp reimbSubDate = rs.getTimestamp("submitted");
+        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -151,22 +137,9 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Timestamp timestamp = rs.getTimestamp("resolved");
-        String reimbSubDate;
-        if(timestamp != null) {
-          Date date = new Date(rs.getTimestamp("resolved").getTime());
-          reimbSubDate = date.toString();
-        } else {
-          reimbSubDate = null;
-        }
-        Timestamp timestamp2 = rs.getTimestamp("resolved");
-        String reimbResolvedDate;
-        if(timestamp2 != null) {
-          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-          reimbResolvedDate = date2.toString();
-        } else {
-          reimbResolvedDate = null;
-        }
+        // todo fix date
+        Timestamp reimbSubDate = rs.getTimestamp("submitted");
+        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -220,16 +193,12 @@ public class ReimbursementDao {
   public Reimbursement updateReimbStatus(int reimbId, int status, int managerId) throws SQLException {
     try (Connection con = ConnectionUtility.getConnection()) {
       con.setAutoCommit(false);
-      String sql = "UPDATE reimbursement SET reimb_status_id = ?, reimb_resolver = ?, reimb_resolved = ? WHERE id = ?";
-
-      Calendar cal = Calendar.getInstance();
-      Timestamp resolvedTime = new Timestamp(cal.getTimeInMillis());
+      String sql = "UPDATE reimbursement SET reimb_status_id = ?, reimb_resolver = ? WHERE id = ?";
 
       try(PreparedStatement ps = con.prepareStatement(sql)) {
         ps.setInt(1, status);
         ps.setInt(2, managerId);
-        ps.setTimestamp(3, resolvedTime);
-        ps.setInt(4, reimbId);
+        ps.setInt(3, reimbId);
 
         ps.executeUpdate();
 
@@ -250,22 +219,10 @@ public class ReimbursementDao {
           int reimbAmount = rs2.getInt("amount");
           String reimbDescription = rs2.getString("description");
 
-          Timestamp timestamp = rs2.getTimestamp("resolved");
-          String reimbSubDate;
-          if(timestamp != null) {
-            Date date = new Date(rs2.getTimestamp("resolved").getTime());
-            reimbSubDate = date.toString();
-          } else {
-            reimbSubDate = null;
-          }
-          Timestamp timestamp2 = rs2.getTimestamp("resolved");
-          String reimbResolvedDate;
-          if(timestamp2 != null) {
-            Date date2 = new Date(rs2.getTimestamp("resolved").getTime());
-            reimbResolvedDate = date2.toString();
-          } else {
-            reimbResolvedDate = null;
-          }
+          // TODO: fix time
+          Timestamp reimbSubDate = rs2.getTimestamp("submitted");
+          Calendar cal = Calendar.getInstance();
+          Timestamp reimbResolvedDate = new Timestamp(cal.getTimeInMillis());
 
           int type = rs2.getInt("type");
           int rStatus = rs2.getInt("status");
@@ -319,22 +276,9 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Timestamp timestamp = rs.getTimestamp("resolved");
-        String reimbSubDate;
-        if(timestamp != null) {
-          Date date = new Date(rs.getTimestamp("resolved").getTime());
-          reimbSubDate = date.toString();
-        } else {
-          reimbSubDate = null;
-        }
-        Timestamp timestamp2 = rs.getTimestamp("resolved");
-        String reimbResolvedDate;
-        if(timestamp2 != null) {
-          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-          reimbResolvedDate = date2.toString();
-        } else {
-          reimbResolvedDate = null;
-        }
+        // TODO fix date
+        Timestamp reimbSubDate = rs.getTimestamp("submitted");
+        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -387,22 +331,9 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Timestamp timestamp = rs.getTimestamp("resolved");
-        String reimbSubDate;
-        if(timestamp != null) {
-          Date date = new Date(rs.getTimestamp("resolved").getTime());
-          reimbSubDate = date.toString();
-        } else {
-          reimbSubDate = null;
-        }
-        Timestamp timestamp2 = rs.getTimestamp("resolved");
-        String reimbResolvedDate;
-        if(timestamp2 != null) {
-          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-          reimbResolvedDate = date2.toString();
-        } else {
-          reimbResolvedDate = null;
-        }
+        // todo fix date
+        Timestamp reimbSubDate = rs.getTimestamp("submitted");
+        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");

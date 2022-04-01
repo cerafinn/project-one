@@ -8,13 +8,13 @@ public class AddReimbursementDTO {
 
   private int remitAmount;
   private String remitDescription;
-  private Timestamp remitSubmitted;
+  private String remitSubmitted;
   private int remitType;
   private InputStream receipt;
 
   public AddReimbursementDTO() {}
 
-  public AddReimbursementDTO(int remitAmount, String remitDescription, Timestamp remitSubmitted, int remitType, InputStream receipt) {
+  public AddReimbursementDTO(int remitAmount, String remitDescription, String remitSubmitted, int remitType, InputStream receipt) {
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
     this.remitSubmitted = remitSubmitted;
@@ -38,11 +38,11 @@ public class AddReimbursementDTO {
     this.remitDescription = remitDescription;
   }
 
-  public Timestamp getRemitSubmitted() {
+  public String getRemitSubmitted() {
     return remitSubmitted;
   }
 
-  public void setRemitSubmitted(Timestamp remitSubmitted) {
+  public void setRemitSubmitted(String remitSubmitted) {
     this.remitSubmitted = remitSubmitted;
   }
 
@@ -67,7 +67,7 @@ public class AddReimbursementDTO {
     if (this == o) return true;
     if (!(o instanceof AddReimbursementDTO)) return false;
     AddReimbursementDTO that = (AddReimbursementDTO) o;
-    return remitAmount == that.remitAmount && remitType == that.remitType && remitDescription.equals(that.remitDescription) && remitSubmitted.equals(that.remitSubmitted) && receipt.equals(that.receipt);
+    return remitAmount == that.remitAmount && remitType == that.remitType && remitDescription.equals(that.remitDescription) && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(receipt, that.receipt);
   }
 
   @Override
@@ -80,7 +80,7 @@ public class AddReimbursementDTO {
     return "AddReimbursementDTO{" +
         "remitAmount=" + remitAmount +
         ", remitDescription='" + remitDescription + '\'' +
-        ", remitSubmitted=" + remitSubmitted +
+        ", remitSubmitted='" + remitSubmitted + '\'' +
         ", remitType=" + remitType +
         ", receipt=" + receipt +
         '}';

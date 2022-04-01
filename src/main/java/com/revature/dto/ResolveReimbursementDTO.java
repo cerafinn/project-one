@@ -1,8 +1,5 @@
 package com.revature.dto;
 
-import com.revature.model.User;
-
-import java.sql.Timestamp;
 import java.util.Objects;
 
 public class ResolveReimbursementDTO {
@@ -149,12 +146,12 @@ public class ResolveReimbursementDTO {
     if (this == o) return true;
     if (!(o instanceof ResolveReimbursementDTO)) return false;
     ResolveReimbursementDTO that = (ResolveReimbursementDTO) o;
-    return id == that.id && remitAmount == that.remitAmount && type == that.type && status == that.status && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(remitResolved, that.remitResolved) && remitDescription.equals(that.remitDescription) && employeeUsername.equals(that.employeeUsername) && Objects.equals(managerUsername, that.managerUsername);
+    return id == that.id && remitAmount == that.remitAmount && type == that.type && status == that.status && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(remitResolved, that.remitResolved) && remitDescription.equals(that.remitDescription) && employeeUsername.equals(that.employeeUsername) && employeeFirstName.equals(that.employeeFirstName) && employeeLastName.equals(that.employeeLastName) && Objects.equals(managerUsername, that.managerUsername) && Objects.equals(managerFirstName, that.managerFirstName) && Objects.equals(managerLastName, that.managerLastName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, type, status, employeeUsername, managerUsername);
+    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, type, status, employeeUsername, employeeFirstName, employeeLastName, managerUsername, managerFirstName, managerLastName);
   }
 
   @Override
@@ -162,13 +159,17 @@ public class ResolveReimbursementDTO {
     return "ResolveReimbursementDTO{" +
         "id=" + id +
         ", remitAmount=" + remitAmount +
-        ", remitSubmitted=" + remitSubmitted +
-        ", remitResolved=" + remitResolved +
+        ", remitSubmitted='" + remitSubmitted + '\'' +
+        ", remitResolved='" + remitResolved + '\'' +
         ", remitDescription='" + remitDescription + '\'' +
         ", type=" + type +
         ", status=" + status +
         ", employeeUsername='" + employeeUsername + '\'' +
+        ", employeeFirstName='" + employeeFirstName + '\'' +
+        ", employeeLastName='" + employeeLastName + '\'' +
         ", managerUsername='" + managerUsername + '\'' +
+        ", managerFirstName='" + managerFirstName + '\'' +
+        ", managerLastName='" + managerLastName + '\'' +
         '}';
   }
 }
