@@ -38,9 +38,9 @@ public class ReimbursementDao {
         String sql2 = "SELECT reimb_submitted FROM reimbursement WHERE id = ?";
         PreparedStatement ps2 = con.prepareStatement(sql2);
         ps2.setInt(1, reimbId);
-        ResultSet rs2 = ps.executeQuery();
-        Date date = new Date(rs2.getTimestamp("reimb_submitted").getTime());
-        String currentDate = date.toString();
+        ResultSet rs2 = ps2.executeQuery();
+        rs2.next();
+        String currentDate = new Date(rs2.getTimestamp("reimb_submitted").getTime()).toString();
 
         String sql3 = "SELECT * FROM users WHERE id = ?";
 
@@ -84,11 +84,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -140,10 +151,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -227,10 +250,22 @@ public class ReimbursementDao {
           int reimbAmount = rs2.getInt("amount");
           String reimbDescription = rs2.getString("description");
 
-          Date date = new Date(rs2.getTimestamp("submitted").getTime());
-          String reimbSubDate = date.toString();
-          Date date2 = new Date(rs2.getTimestamp("resolved").getTime());
-          String resolvedDate = date2.toString();
+          Timestamp timestamp = rs2.getTimestamp("resolved");
+          String reimbSubDate;
+          if(timestamp != null) {
+            Date date = new Date(rs2.getTimestamp("resolved").getTime());
+            reimbSubDate = date.toString();
+          } else {
+            reimbSubDate = null;
+          }
+          Timestamp timestamp2 = rs2.getTimestamp("resolved");
+          String reimbResolvedDate;
+          if(timestamp2 != null) {
+            Date date2 = new Date(rs2.getTimestamp("resolved").getTime());
+            reimbResolvedDate = date2.toString();
+          } else {
+            reimbResolvedDate = null;
+          }
 
           int type = rs2.getInt("type");
           int rStatus = rs2.getInt("status");
@@ -255,7 +290,7 @@ public class ReimbursementDao {
 
           User manager = new User(mId, mUsername, mPassword, mUserFirstName, mUserLastName, mUserEmail, mUserRole);
 
-          Reimbursement r = new Reimbursement(rId, reimbAmount, reimbDescription, reimbSubDate, resolvedDate, employee, manager, type, rStatus);
+          Reimbursement r = new Reimbursement(rId, reimbAmount, reimbDescription, reimbSubDate, reimbResolvedDate, employee, manager, type, rStatus);
 
           con.commit();
           return r;
@@ -284,10 +319,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -340,10 +387,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -396,10 +455,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -453,10 +524,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -508,10 +591,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -564,10 +659,22 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
-        Date date = new Date(rs.getTimestamp("submitted").getTime());
-        String reimbSubDate = date.toString();
-        Date date2 = new Date(rs.getTimestamp("resolved").getTime());
-        String reimbResolvedDate = date2.toString();
+        Timestamp timestamp = rs.getTimestamp("resolved");
+        String reimbSubDate;
+        if(timestamp != null) {
+          Date date = new Date(rs.getTimestamp("resolved").getTime());
+          reimbSubDate = date.toString();
+        } else {
+          reimbSubDate = null;
+        }
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if(timestamp2 != null) {
+          Date date2 = new Date(rs.getTimestamp("resolved").getTime());
+          reimbResolvedDate = date2.toString();
+        } else {
+          reimbResolvedDate = null;
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
