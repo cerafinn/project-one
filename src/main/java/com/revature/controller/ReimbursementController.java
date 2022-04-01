@@ -42,12 +42,13 @@ public class ReimbursementController implements Controller {
 
     Map<String, List<String>> queryMap = ctx.queryParamMap();
     List<ResolveReimbursementDTO> reimbursements;
-    if (queryMap.containsKey("status") && queryMap.containsKey("type")) {
-      reimbursements = reimbursementService.getAllReimbursementsByStatusAndType(status, type);
-    } else if (queryMap.containsKey("status")) {
+//    if (queryMap.containsKey("status") && queryMap.containsKey("type")) {
+//      reimbursements = reimbursementService.getAllReimbursementsByStatusAndType(status, type);
+//    } else
+      if (queryMap.containsKey("status")) {
       reimbursements = reimbursementService.getAllReimbursementsByStatus(status);
-    } else if (queryMap.containsKey("type")) {
-      reimbursements = reimbursementService.getAllReimbursementsByType(type);
+//    } else if (queryMap.containsKey("type")) {
+//      reimbursements = reimbursementService.getAllReimbursementsByType(type);
     } else {
       reimbursements = reimbursementService.getAllReimbursements();
     }
@@ -77,15 +78,16 @@ public class ReimbursementController implements Controller {
     String type = ctx.queryParam("type");
 
     Map<String, List<String>> queryMap = ctx.queryParamMap();
-    if(queryMap.containsKey("status") && queryMap.containsKey("type")) {
-      List<ResolveReimbursementDTO> reimbursements = reimbursementService.getAllReimbByUserStatusAndType(id, status, type);
-      ctx.json(reimbursements);
-    } else if (queryMap.containsKey("status")) {
+//    if(queryMap.containsKey("status") && queryMap.containsKey("type")) {
+//      List<ResolveReimbursementDTO> reimbursements = reimbursementService.getAllReimbByUserStatusAndType(id, status, type);
+//      ctx.json(reimbursements);
+//    } else
+      if (queryMap.containsKey("status")) {
       List<ResolveReimbursementDTO> reimbursements = reimbursementService.getReimbByUserAndStatus(id, status);
       ctx.json(reimbursements);
-    } else if(queryMap.containsKey("type")) {
-      List<ResolveReimbursementDTO> reimbursements = reimbursementService.getReimbByUserAndType(id, type);
-      ctx.json(reimbursements);
+//    } else if(queryMap.containsKey("type")) {
+//      List<ResolveReimbursementDTO> reimbursements = reimbursementService.getReimbByUserAndType(id, type);
+//      ctx.json(reimbursements);
     } else {
       List<ResolveReimbursementDTO> dtos = this.reimbursementService.getReimbByUser(id);
       ctx.json(dtos);

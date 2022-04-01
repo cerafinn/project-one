@@ -120,61 +120,61 @@ public class ReimbursementService {
     return reimbDTOs;
   }
 
-  public List<ResolveReimbursementDTO> getAllReimbursementsByStatusAndType(String status, String type) throws SQLException {
-    int intStatus = Integer.parseInt(status);
-    int intType = Integer.parseInt(type);
-    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByStatusAndType(intStatus, intType);
-    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
-
-    for(Reimbursement reimbursement : reimbursements) {
-      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
-          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
-          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
-          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
-    }
-    return reimbDTOs;
-  }
-
-  public List<ResolveReimbursementDTO> getAllReimbByUserStatusAndType(int userId, String status, String type) throws SQLException {
-    int intStatus = Integer.parseInt(status);
-    int intType = Integer.parseInt(type);
-    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUserStatusAndType(userId, intStatus, intType);
-    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
-
-    for(Reimbursement reimbursement : reimbursements) {
-      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
-          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
-          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
-          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
-    }
-    return reimbDTOs;
-  }
-
-  public List<ResolveReimbursementDTO> getAllReimbursementsByType(String type) throws SQLException {
-    int intType = Integer.parseInt(type);
-    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByType(intType);
-    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
-
-    for(Reimbursement reimbursement : reimbursements) {
-      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
-          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
-          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
-          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
-    }
-    return reimbDTOs;
-  }
-
-  public List<ResolveReimbursementDTO> getReimbByUserAndType(int userId, String type) throws SQLException {
-    int intType = Integer.parseInt(type);
-    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUserAndType(userId, intType);
-    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
-
-    for(Reimbursement reimbursement : reimbursements) {
-      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
-          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
-          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
-          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
-    }
-    return reimbDTOs;
-  }
+//  public List<ResolveReimbursementDTO> getAllReimbursementsByStatusAndType(String status, String type) throws SQLException {
+//    int intStatus = Integer.parseInt(status);
+//    int intType = Integer.parseInt(type);
+//    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByStatusAndType(intStatus, intType);
+//    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+//
+//    for(Reimbursement reimbursement : reimbursements) {
+//      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+//          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+//          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+//          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+//    }
+//    return reimbDTOs;
+//  }
+//
+//  public List<ResolveReimbursementDTO> getAllReimbByUserStatusAndType(int userId, String status, String type) throws SQLException {
+//    int intStatus = Integer.parseInt(status);
+//    int intType = Integer.parseInt(type);
+//    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUserStatusAndType(userId, intStatus, intType);
+//    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+//
+//    for(Reimbursement reimbursement : reimbursements) {
+//      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+//          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+//          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+//          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+//    }
+//    return reimbDTOs;
+//  }
+//
+//  public List<ResolveReimbursementDTO> getAllReimbursementsByType(String type) throws SQLException {
+//    int intType = Integer.parseInt(type);
+//    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByType(intType);
+//    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+//
+//    for(Reimbursement reimbursement : reimbursements) {
+//      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+//          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+//          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+//          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+//    }
+//    return reimbDTOs;
+//  }
+//
+//  public List<ResolveReimbursementDTO> getReimbByUserAndType(int userId, String type) throws SQLException {
+//    int intType = Integer.parseInt(type);
+//    List<Reimbursement> reimbursements = this.reimbursementDao.getAllReimbByUserAndType(userId, intType);
+//    List<ResolveReimbursementDTO> reimbDTOs = new ArrayList<>();
+//
+//    for(Reimbursement reimbursement : reimbursements) {
+//      reimbDTOs.add(new ResolveReimbursementDTO(reimbursement.getId(), reimbursement.getRemitAmount(), reimbursement.getRemitDrescription(),
+//          reimbursement.getRemitSubmitted(), reimbursement.getRemitResolved(), reimbursement.getType(), reimbursement.getStatus(),
+//          reimbursement.getEmployee().getUsername(), reimbursement.getEmployee().getUserFirstName(), reimbursement.getEmployee().getUserLastName(),
+//          reimbursement.getManager().getUsername(), reimbursement.getManager().getUserFirstName(), reimbursement.getManager().getUserLastName()));
+//    }
+//    return reimbDTOs;
+//  }
 }
