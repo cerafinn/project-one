@@ -54,7 +54,21 @@ public class ResolveReimbursementDTO {
     this.remitAmount = remitAmount;
   }
 
+  public Timestamp getRemitSubmitted() {
+    return remitSubmitted;
+  }
 
+  public void setRemitSubmitted(Timestamp remitSubmitted) {
+    this.remitSubmitted = remitSubmitted;
+  }
+
+  public Timestamp getRemitResolved() {
+    return remitResolved;
+  }
+
+  public void setRemitResolved(Timestamp remitResolved) {
+    this.remitResolved = remitResolved;
+  }
 
   public String getRemitDescription() {
     return remitDescription;
@@ -133,12 +147,12 @@ public class ResolveReimbursementDTO {
     if (this == o) return true;
     if (!(o instanceof ResolveReimbursementDTO)) return false;
     ResolveReimbursementDTO that = (ResolveReimbursementDTO) o;
-    return id == that.id && remitAmount == that.remitAmount && type == that.type && status == that.status && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(remitResolved, that.remitResolved) && remitDescription.equals(that.remitDescription) && employeeUsername.equals(that.employeeUsername) && Objects.equals(managerUsername, that.managerUsername);
+    return id == that.id && remitAmount == that.remitAmount && type == that.type && status == that.status && remitSubmitted.equals(that.remitSubmitted) && Objects.equals(remitResolved, that.remitResolved) && Objects.equals(remitDescription, that.remitDescription) && employeeUsername.equals(that.employeeUsername) && employeeFirstName.equals(that.employeeFirstName) && employeeLastName.equals(that.employeeLastName) && Objects.equals(managerUsername, that.managerUsername) && Objects.equals(managerFirstName, that.managerFirstName) && Objects.equals(managerLastName, that.managerLastName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, type, status, employeeUsername, managerUsername);
+    return Objects.hash(id, remitAmount, remitSubmitted, remitResolved, remitDescription, type, status, employeeUsername, employeeFirstName, employeeLastName, managerUsername, managerFirstName, managerLastName);
   }
 
   @Override
@@ -152,7 +166,11 @@ public class ResolveReimbursementDTO {
         ", type=" + type +
         ", status=" + status +
         ", employeeUsername='" + employeeUsername + '\'' +
+        ", employeeFirstName='" + employeeFirstName + '\'' +
+        ", employeeLastName='" + employeeLastName + '\'' +
         ", managerUsername='" + managerUsername + '\'' +
+        ", managerFirstName='" + managerFirstName + '\'' +
+        ", managerLastName='" + managerLastName + '\'' +
         '}';
   }
 }
