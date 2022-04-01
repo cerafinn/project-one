@@ -24,7 +24,7 @@ public class ReimbursementDao {
         ps.setInt(1, dto.getRemitAmount());
         ps.setString(2, dto.getRemitDescription());
         //TODO fix date
-        ps.setTimestamp(3, dto.getRemitSubmitted());
+        ps.setString(3, dto.getRemitSubmitted());
         ps.setInt(4, dto.getRemitType());
         ps.setInt(5, 1);
         ps.setBinaryStream(6, dto.getReceipt());
@@ -53,7 +53,7 @@ public class ReimbursementDao {
           User employee = new User(userId, username, password, userFirstName, userLastName, userEmail, userRole);
 //TODO fix date
           Calendar cal = Calendar.getInstance();
-          Timestamp currentDate = new Timestamp(cal.getTimeInMillis());
+          String currentDate = new Timestamp(cal.getTimeInMillis()).toString();
 
           Reimbursement reimb = new Reimbursement(reimbId, dto.getRemitAmount(), dto.getRemitDescription(), currentDate, null, employee, null, dto.getRemitType(), 1);
           con.commit();
@@ -82,10 +82,21 @@ public class ReimbursementDao {
         int reimbAmount = rs.getInt("amount");
         String reimbDescription = rs.getString("description");
 
+        Timestamp timestamp = rs.getTimestamp("submitted");
+        String reimbSubDate;
+        if (timestamp == null) {
+          reimbSubDate = null;
+        } else {
+          reimbSubDate = timestamp.toString();
+        }
 
-        // TODO fix date
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        Timestamp timestamp2 = rs.getTimestamp("resolved");
+        String reimbResolvedDate;
+        if (timestamp2 == null) {
+          reimbResolvedDate = null;
+        } else {
+          reimbResolvedDate = timestamp.toString();
+        }
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -138,8 +149,8 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // todo fix date
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        String reimbSubDate = rs.getTimestamp("submitted").toString();
+        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -220,9 +231,9 @@ public class ReimbursementDao {
           String reimbDescription = rs2.getString("description");
 
           // TODO: fix time
-          Timestamp reimbSubDate = rs2.getTimestamp("submitted");
+          String reimbSubDate = rs2.getTimestamp("submitted").toString();
           Calendar cal = Calendar.getInstance();
-          Timestamp reimbResolvedDate = new Timestamp(cal.getTimeInMillis());
+          String reimbResolvedDate = new Timestamp(cal.getTimeInMillis()).toString();
 
           int type = rs2.getInt("type");
           int rStatus = rs2.getInt("status");
@@ -277,8 +288,8 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // TODO fix date
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        String reimbSubDate = rs.getTimestamp("submitted").toString();
+        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
@@ -332,8 +343,8 @@ public class ReimbursementDao {
         String reimbDescription = rs.getString("description");
 
         // todo fix date
-        Timestamp reimbSubDate = rs.getTimestamp("submitted");
-        Timestamp reimbResolvedDate = rs.getTimestamp("resolved");
+        String reimbSubDate = rs.getTimestamp("submitted").toString();
+        String reimbResolvedDate = rs.getTimestamp("resolved").toString();
 
         int type = rs.getInt("type");
         int status = rs.getInt("status");
