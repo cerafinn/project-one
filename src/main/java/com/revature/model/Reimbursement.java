@@ -8,15 +8,15 @@ public class Reimbursement {
 
   private int id;
   private int remitAmount;
-  private String remitSubmitted;
-  private String remitResolved;
+  private Timestamp remitSubmitted;
+  private Timestamp remitResolved;
   private String remitDescription;
   private User employee;
   private User manager;
   private int type;
   private int status;
 
-  public Reimbursement(int id, int remitAmount, String remitDescription, String remitSubmitted, String remitResolved, User employee, User manager, int type, int status) {
+  public Reimbursement(int id, int remitAmount, String remitDescription, Timestamp remitSubmitted, Timestamp remitResolved, User employee, User manager, int type, int status) {
     this.id = id;
     this.remitAmount = remitAmount;
     this.remitDescription = remitDescription;
@@ -48,19 +48,19 @@ public class Reimbursement {
     this.remitAmount = remitAmount;
   }
 
-  public String getRemitSubmitted() {
+  public Timestamp getRemitSubmitted() {
     return remitSubmitted;
   }
 
-  public void setRemitSubmitted(String remitSubmitted) {
+  public void setRemitSubmitted(Timestamp remitSubmitted) {
     this.remitSubmitted = remitSubmitted;
   }
 
-  public String getRemitResolved() {
+  public Timestamp getRemitResolved() {
     return remitResolved;
   }
 
-  public void setRemitResolved(String remitResolved) {
+  public void setRemitResolved(Timestamp remitResolved) {
     this.remitResolved = remitResolved;
   }
 
