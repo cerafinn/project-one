@@ -40,6 +40,7 @@ Table of Contents |
 TO-DO:
 - Include dates on the reimbursement table for employees and managers
 - Add modal to view the receipt at higher resolution
+- Refine frontend UI
 
 <br />
 
@@ -58,7 +59,14 @@ In order to run the project locally, first clone the repository by entering the 
 
 ## Screenshots
 
-![IMG](./assets/images/project-one-screenshot.png)
+Login Page:
+![IMG](./assets/images/login.png)
+
+Finance Manager Dashboard:
+![IMG](./assets/images/finance-manager-page.png)
+
+Employee Dashboard:
+![IMG](./assets/images/employee-page.png)
 
 <br />
 
